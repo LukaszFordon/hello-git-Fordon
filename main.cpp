@@ -61,7 +61,6 @@ int main()
     rectangle_4.set_position(200,100);
     Paddle rectangle_5;
     rectangle_5.set_position(550,100);
-    Paddle rectangle_6;
 
     sf::Texture tekstura;
     tekstura.loadFromFile( "niebo.jpg" );
