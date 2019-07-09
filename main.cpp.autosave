@@ -70,9 +70,13 @@ bool collision(Paddle &rectangle_A, Paddle &rectangle_B)
 
 int main()
 {
+    vector < Paddle > runda;
+    
      sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
     Paddle rectangle_1;
     rectangle_1.set_position(200,600);
+    
+    
     Paddle rectangle_2;
     rectangle_2.set_position(500,100);
     Paddle rectangle_3;
@@ -86,8 +90,12 @@ int main()
     tekstura.loadFromFile( "niebo.jpg" );
     sf::Sprite obrazek;
     obrazek.setTexture( tekstura );
-
-
+    runda.push_back(rectangle_2);
+    runda.push_back(rectangle_3);
+    runda.push_back(rectangle_4);
+    runda.push_back(rectangle_5);
+    
+    
 
     sf::Clock clock;
  while (window.isOpen()) {
@@ -120,7 +128,9 @@ int main()
 
       window.draw( obrazek );
 
-    rectangle_1.draw(window);
+
+    
+    
     rectangle_2.draw(window);
     rectangle_3.draw(window);
     rectangle_4.draw(window);
