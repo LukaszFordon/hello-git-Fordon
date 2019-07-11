@@ -2,16 +2,18 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <memory>
+#include<vector>
 
 class Paddle{
 protected:
  sf::RectangleShape rectangle_;
  public:
     Paddle (){
-        rectangle_.setSize(sf::Vector2f(60.0, 60.0));
-        rectangle_.setPosition(500.0, 400.0);
-        rectangle_.setFillColor(sf::Color(255, 10, 10));
-        rectangle_.getGlobalBounds();
+         rectangle_.setSize(sf::Vector2f(60.0, 60.0));
+         rectangle_.setPosition(500.0, 400.0);
+         rectangle_.setFillColor(sf::Color(255, 10, 10));
+         rectangle_.getGlobalBounds();
       }
 
     void bounds(float &x, float &y)
@@ -22,6 +24,7 @@ protected:
     void draw(sf::RenderWindow &w)
     {
        w.draw(rectangle_);
+
 
     }
     void down(float delta_y){
@@ -48,31 +51,33 @@ protected:
 using namespace std;
 bool collision(Paddle &rectangle_A, Paddle &rectangle_B)
 {
-	float x1;
-	float y1;
-	float x2;
-	float y2;
-	rectangle_A.bounds(x1, y1);
-	rectangle_B.bounds(x2, y2);
+        float x1;
+        float y1;
+        float x2;
+        float y2;
+        rectangle_A.bounds(x1, y1);
+        rectangle_B.bounds(x2, y2);
 
-	//cout << x1 << " : " << y1 << endl;
-	//cout << x2 << " : " << y2 << endl;
+        //cout << x1 << " : " << y1 << endl;
+        //cout << x2 << " : " << y2 << endl;
 
-	if (x1 + 50 > x2 && x1 - 50 < x2 && y1 + 50 > y2 && y1 - 50 < y2)
-	{
-		cout << "=====" << endl;
-		return true;
-	}
-	return false;
+        if (x1 + 50 > x2 && x1 - 50 < x2 && y1 + 50 > y2 && y1 - 50 < y2)
+        {
+                cout << "=====" << endl;
+                return true;
+        }
+        return false;
 }
 
 
 
 int main()
 {
+    std::vector<Paddle*> runda;
      sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
     Paddle rectangle_1;
     rectangle_1.set_position(200,600);
+
     Paddle rectangle_2;
     rectangle_2.set_position(500,100);
     Paddle rectangle_3;
@@ -81,11 +86,19 @@ int main()
     rectangle_4.set_position(200,100);
     Paddle rectangle_5;
     rectangle_5.set_position(550,100);
+    runda.push_back(&rectangle_2);
+    runda.push_back(&rectangle_3);
+    runda.push_back(&rectangle_4);
+    runda.push_back(&rectangle_5);
 
     sf::Texture tekstura;
     tekstura.loadFromFile( "niebo.jpg" );
     sf::Sprite obrazek;
     obrazek.setTexture( tekstura );
+
+    sf::RectangleShape rectangle(sf::Vector2f(120.0, 60.0));
+    rectangle.setPosition(500.0, 400.0);
+    rectangle.setFillColor(sf::Color(100, 50, 250));
 
 
 
@@ -111,20 +124,34 @@ int main()
     rectangle_3.down(1);
     rectangle_4.down(0.75);
     rectangle_5.down(0.2);
- 
-	collision(rectangle_1, rectangle_2);
-	collision(rectangle_1, rectangle_3);
-	collision(rectangle_1, rectangle_4);
-	collision(rectangle_1, rectangle_5);
-	
+
+        collision(rectangle_1, rectangle_2);
+        collision(rectangle_1, rectangle_3);
+        collision(rectangle_1, rectangle_4);
+        collision(rectangle_1, rectangle_5);
+
 
       window.draw( obrazek );
 
     rectangle_1.draw(window);
-    rectangle_2.draw(window);
-    rectangle_3.draw(window);
-    rectangle_4.draw(window);
-    rectangle_5.draw(window);
+ //window.draw(rectangle);
+
+    //rectangle_2.draw(window);
+     //rectangle_3.draw(window);
+     //rectangle_4.draw(window);
+     //rectangle_5.draw(window);
+
+       for(auto itr=runda.begin(); itr!=runda.end();itr++)
+       {
+        (*itr)->draw(window);
+       // itr->down(1);
+
+       }
+
+
+
+
+
    window.display();
 }
     return 0;
