@@ -12,8 +12,9 @@ protected:
     Paddle (){
          rectangle_.setSize(sf::Vector2f(60.0, 60.0));
          rectangle_.setPosition(500.0, 400.0);
-         rectangle_.setFillColor(sf::Color(255, 10, 10));
+         rectangle_.setFillColor(sf::Color(255, 255, 10));
          rectangle_.getGlobalBounds();
+
       }
 
     void bounds(float &x, float &y)
@@ -28,7 +29,12 @@ protected:
 
     }
     void down(float delta_y){
-        rectangle_.move(0,1*delta_y);
+        rectangle_.move(0,2*delta_y);
+    }
+
+    void set_size(float x, float y)
+    {
+        rectangle_.setSize(sf::Vector2f(x,y));
     }
 
 
@@ -36,8 +42,11 @@ protected:
         rectangle_.setPosition(x,y-100);
 
     }
+
+
+
     void step(float delta_x){
-                double stepp=0.3;
+                double stepp=0.5;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
         {
             rectangle_.move(stepp*delta_x,0);
@@ -49,6 +58,17 @@ protected:
     }
 };
 using namespace std;
+
+Paddle ustawienia(Paddle &rectangle_2, Paddle &rectangle_3, Paddle &rectangle_4, Paddle &rectangle_5)
+{
+    rectangle_2.set_position(500,100);
+    rectangle_3.set_position(300,100);
+    rectangle_4.set_position(200,100);
+    rectangle_5.set_position(550,100);
+    return rectangle_2;
+
+}
+
 bool collision(Paddle &rectangle_A, Paddle &rectangle_B)
 {
         float x1;
@@ -70,6 +90,27 @@ bool collision(Paddle &rectangle_A, Paddle &rectangle_B)
 }
 
 
+bool collision_d(Paddle &rectangle_A, Paddle &rectangle_B)
+{
+        float x1;
+        float y1;
+        float x2;
+        float y2;
+        rectangle_A.bounds(x1, y1);
+        rectangle_B.bounds(x2, y2);
+
+       // cout << x1 << " : " << y1 << endl;
+       //cout << x2 << " : " << y2 << endl;
+
+        if (y1  < y2 )
+        {
+                cout << "=====" << endl;
+                return true;
+        }
+        return false;
+}
+
+
 
 int main()
 {
@@ -79,17 +120,22 @@ int main()
     rectangle_1.set_position(200,600);
 
     Paddle rectangle_2;
-    rectangle_2.set_position(500,100);
+    //rectangle_2.set_position(500,100);
     Paddle rectangle_3;
-    rectangle_3.set_position(300,100);
+    //rectangle_3.set_position(300,100);
     Paddle rectangle_4;
-    rectangle_4.set_position(200,100);
+    //rectangle_4.set_position(200,100);
     Paddle rectangle_5;
-    rectangle_5.set_position(550,100);
+    //rectangle_5.set_position(550,100);
+    ustawienia(rectangle_2, rectangle_3,rectangle_4,rectangle_5);
     runda.push_back(&rectangle_2);
     runda.push_back(&rectangle_3);
     runda.push_back(&rectangle_4);
     runda.push_back(&rectangle_5);
+
+    Paddle rectangle_d;
+    rectangle_d.set_position(0,660);
+    rectangle_d.set_size(800,5);
 
     sf::Texture tekstura;
     tekstura.loadFromFile( "niebo.jpg" );
@@ -130,23 +176,38 @@ int main()
         collision(rectangle_1, rectangle_4);
         collision(rectangle_1, rectangle_5);
 
+        collision_d(rectangle_d, rectangle_5);
+
+
+
 
       window.draw( obrazek );
 
     rectangle_1.draw(window);
- //window.draw(rectangle);
+    rectangle_d.draw(window);
 
-    //rectangle_2.draw(window);
-     //rectangle_3.draw(window);
-     //rectangle_4.draw(window);
-     //rectangle_5.draw(window);
 
        for(auto itr=runda.begin(); itr!=runda.end();itr++)
        {
         (*itr)->draw(window);
-       // itr->down(1);
+
 
        }
+int i=0;
+       if(collision_d(rectangle_d, rectangle_5)==true && i<1)
+    {
+           ustawienia(rectangle_2,rectangle_3,rectangle_4,rectangle_5);
+
+
+        for(auto itr=runda.begin(); itr!=runda.end();itr++)
+        {
+         (*itr)->draw(window);
+            cout<<"juz";
+        i=2;
+        }
+
+
+    }
 
 
 
