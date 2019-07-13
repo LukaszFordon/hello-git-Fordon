@@ -4,6 +4,8 @@
 #include <string>
 #include <memory>
 #include<vector>
+#include <cstdlib>
+#include <ctime>
 
 class Paddle{
 protected:
@@ -59,12 +61,23 @@ protected:
 };
 using namespace std;
 
-Paddle ustawienia(Paddle &rectangle_2, Paddle &rectangle_3, Paddle &rectangle_4, Paddle &rectangle_5)
+Paddle ustawienia(Paddle &rectangle_2, Paddle &rectangle_3, Paddle &rectangle_4, Paddle &rectangle_5,Paddle &rectangle_6,Paddle &rectangle_7,Paddle &rectangle_8 )
 {
-    rectangle_2.set_position(500,100);
-    rectangle_3.set_position(300,100);
-    rectangle_4.set_position(200,100);
-    rectangle_5.set_position(550,100);
+    int x2=( std::rand() % 750 ) + 0;
+    int x3 =( std::rand() % 750 ) + 0;
+    int x4=( std::rand() % 750 ) + 0;
+    int x5 =( std::rand() % 750 ) + 0;
+    int x6=( std::rand() % 650 ) + 200;
+    int x7=( std::rand() % 750 ) + 0;
+    int x8=( std::rand() % 450 ) + 200;
+
+    rectangle_2.set_position(x2,30);
+    rectangle_3.set_position(x3,30);
+    rectangle_4.set_position(x4,30);
+    rectangle_5.set_position(x5,30);
+    rectangle_6.set_position(x6,30);
+    rectangle_7.set_position(x7,30);
+    rectangle_8.set_position(x8,30);
     return rectangle_2;
 
 }
@@ -104,7 +117,7 @@ bool collision_d(Paddle &rectangle_A, Paddle &rectangle_B)
 
         if (y1  < y2 )
         {
-                cout << "=====" << endl;
+                cout << "/////" << endl;
                 return true;
         }
         return false;
@@ -114,25 +127,27 @@ bool collision_d(Paddle &rectangle_A, Paddle &rectangle_B)
 
 int main()
 {
+    srand( time( NULL ) );
     std::vector<Paddle*> runda;
      sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
     Paddle rectangle_1;
-    rectangle_1.set_position(200,600);
+    rectangle_1.set_position(400,600);
 
     Paddle rectangle_2;
-    //rectangle_2.set_position(500,100);
     Paddle rectangle_3;
-    //rectangle_3.set_position(300,100);
     Paddle rectangle_4;
-    //rectangle_4.set_position(200,100);
     Paddle rectangle_5;
-    //rectangle_5.set_position(550,100);
-    ustawienia(rectangle_2, rectangle_3,rectangle_4,rectangle_5);
+    Paddle rectangle_6;
+    Paddle rectangle_7;
+    Paddle rectangle_8;
+    ustawienia(rectangle_2, rectangle_3,rectangle_4,rectangle_5,rectangle_6,rectangle_7,rectangle_8);
     runda.push_back(&rectangle_2);
     runda.push_back(&rectangle_3);
     runda.push_back(&rectangle_4);
     runda.push_back(&rectangle_5);
-
+    runda.push_back(&rectangle_6);
+    runda.push_back(&rectangle_7);
+    runda.push_back(&rectangle_8);
     Paddle rectangle_d;
     rectangle_d.set_position(0,660);
     rectangle_d.set_size(800,5);
@@ -169,14 +184,24 @@ int main()
     rectangle_2.down(0.5);
     rectangle_3.down(1);
     rectangle_4.down(0.75);
-    rectangle_5.down(0.2);
+    rectangle_5.down(0.4);
+    rectangle_6.down(( std::rand() % 1 ) + 0.1);
+    rectangle_7.down(( std::rand() % 3 ) + 0.1);
+    rectangle_8.down(( std::rand() % 2 ) + 0.1);
 
         collision(rectangle_1, rectangle_2);
         collision(rectangle_1, rectangle_3);
         collision(rectangle_1, rectangle_4);
         collision(rectangle_1, rectangle_5);
+        collision(rectangle_1, rectangle_6);
+        collision(rectangle_1, rectangle_7);
+        collision(rectangle_1, rectangle_8);
 
-        collision_d(rectangle_d, rectangle_5);
+
+
+
+
+        //collision_d(rectangle_d, rectangle_5);
 
 
 
@@ -194,16 +219,16 @@ int main()
 
        }
 int i=0;
-       if(collision_d(rectangle_d, rectangle_5)==true && i<1)
+       if(collision_d(rectangle_d, rectangle_8)==true && i<1)
     {
-           ustawienia(rectangle_2,rectangle_3,rectangle_4,rectangle_5);
+           ustawienia(rectangle_2, rectangle_3,rectangle_4,rectangle_5,rectangle_6,rectangle_7,rectangle_8);
 
 
         for(auto itr=runda.begin(); itr!=runda.end();itr++)
         {
          (*itr)->draw(window);
-            cout<<"juz";
-        i=2;
+          i=2;
+          cout<<"xD";
         }
 
 
