@@ -191,7 +191,7 @@ bool collision_d(Paddle &rectangle_A, Paddle &rectangle_B)
 
         if (y1  < y2 )
         {
-                cout << "/////" << endl;
+                //cout << "/////" << endl;
                 return true;
         }
         return false;
@@ -222,6 +222,8 @@ bool shotcollision(Shot &rectangle_A, Paddle &rectangle_B)
 
 int main()
 {
+    int zycie=3;
+    int pociski=1;
     srand( time( NULL ) );
     bool b=false;
     sf::Texture texture;
@@ -241,7 +243,7 @@ int main()
     rectangle_1.set_position(400,600);
 
     Shot pocisk_1;
-    pocisk_1.set_position(420,600);
+    pocisk_1.set_position(420,630);
 
     Paddle rectangle_2;
     Paddle rectangle_3;
@@ -260,7 +262,7 @@ int main()
     runda.push_back(&rectangle_8);
     Paddle rectangle_d;
     rectangle_d.set_position(0,660);
-    rectangle_d.set_size(800,5);
+    rectangle_d.set_size(8000,5);
 
     sf::Texture tekstura;
     tekstura.loadFromFile( "niebo.jpg" );
@@ -287,7 +289,7 @@ int main()
              window.close();
      }
       window.clear(sf::Color::Black);
-      int a=0;
+
       if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
                       rectangle_1.step(-2.0);
                     if(!b) pocisk_1.step(-2.0);
@@ -315,9 +317,9 @@ if(b==true)
     rectangle_3.down(0.75);
     rectangle_4.down(0.75);
     rectangle_5.down(0.4);
-    rectangle_6.down(( std::rand() % 1 ) + 0.1);
-    rectangle_7.down(( std::rand() % 3 ) + 0.1);
-    rectangle_8.down(( std::rand() % 2 ) + 0.1);
+    rectangle_6.down(( std::rand() % 1 ) + 0.4);
+    rectangle_7.down(( std::rand() % 3 ) + 0.4);
+    rectangle_8.down(( std::rand() % 2 ) + 0.4);
 
     //sf::FloatRect boundy=rectangle_1.doKolizji();
     //sf::FloatRect boundy2=rectangle_2.doKolizji();
@@ -325,27 +327,42 @@ if(b==true)
     if(rectangle_1.doKolizji().intersects(rectangle_2.doKolizji())==true )
     {
     cout<<"kolizja";
+    rectangle_2.set_position(100,1000);
     }
 
 
     if(rectangle_1.doKolizji().intersects(rectangle_3.doKolizji())==true )
     {
     cout<<"kolizja";
+    rectangle_3.set_position(100,1000);
     }
 
 
     if(rectangle_1.doKolizji().intersects(rectangle_4.doKolizji())==true )
     {
     cout<<"kolizja";
+    rectangle_4.set_position(100,1000);
     }
     if(rectangle_1.doKolizji().intersects(rectangle_5.doKolizji())==true )
     {
     cout<<"kolizja";
+    rectangle_5.set_position(100,1000);
     }
 
     if(rectangle_1.doKolizji().intersects(rectangle_6.doKolizji())==true )
     {
     cout<<"kolizja";
+    rectangle_6.set_position(100,1000);
+    }
+    if(rectangle_1.doKolizji().intersects(rectangle_7.doKolizji())==true )
+    {
+    cout<<"kolizja";
+    rectangle_7.set_position(100,1000);
+    }
+    if(rectangle_1.doKolizji().intersects(rectangle_8.doKolizji())==true )
+    {
+    cout<<"kolizja";
+    rectangle_8.set_position(100,1000);
     }
 
 
@@ -363,38 +380,38 @@ if(b==true)
     if(pocisk_1.doKolizji().intersects(rectangle_2.doKolizji())==true )
     {
     cout<<"trafiony";
-    rectangle_2.step(3.0);
+    rectangle_2.set_position(100,1000);
     }
 
     if(pocisk_1.doKolizji().intersects(rectangle_3.doKolizji())==true )
     {
     cout<<"trafiony";
-    rectangle_3.step(3.0);
+    rectangle_3.set_position(100,1000);
     }
     if(pocisk_1.doKolizji().intersects(rectangle_4.doKolizji())==true )
     {
     cout<<"trafiony";
-    rectangle_4.step(3.0);
+    rectangle_4.set_position(100,1000);
     }
     if(pocisk_1.doKolizji().intersects(rectangle_5.doKolizji())==true )
     {
     cout<<"trafiony";
-    rectangle_5.step(3.0);
+    rectangle_5.set_position(100,1000);
     }
     if(pocisk_1.doKolizji().intersects(rectangle_6.doKolizji())==true )
     {
     cout<<"trafiony";
-    rectangle_6.step(3.0);
+    rectangle_6.set_position(100,1000);
     }
     if(pocisk_1.doKolizji().intersects(rectangle_7.doKolizji())==true )
     {
     cout<<"trafiony";
-    rectangle_7.step(3.0);
+    rectangle_7.set_position(100,1000);
     }
     if(pocisk_1.doKolizji().intersects(rectangle_8.doKolizji())==true )
     {
     cout<<"trafiony";
-    rectangle_8.step(3.0);
+    rectangle_8.set_position(100,1000);
     }
 
 
@@ -432,7 +449,23 @@ if(b==true)
        }
 
        int i=0;
-       if(collision_d(rectangle_d, rectangle_8)==true && i<1)
+       if(collision_d(rectangle_d, rectangle_8)==true)
+        i++;
+       if(collision_d(rectangle_d, rectangle_7)==true)
+        i++;
+       if(collision_d(rectangle_d, rectangle_6)==true)
+        i++;
+       if(collision_d(rectangle_d, rectangle_5)==true)
+        i++;
+       if(collision_d(rectangle_d, rectangle_4)==true)
+
+        i++;
+       if(collision_d(rectangle_d, rectangle_3)==true)
+        i++;
+       if(collision_d(rectangle_d, rectangle_2)==true)
+        i++;
+
+       if(i==7)
     {
            ustawienia(rectangle_2, rectangle_3,rectangle_4,rectangle_5,rectangle_6,rectangle_7,rectangle_8);
 
@@ -441,7 +474,7 @@ if(b==true)
         {
          (*itr)->draw(window);
           i=2;
-          cout<<"xD";
+        //  cout<<"xD";
         }
 
 
