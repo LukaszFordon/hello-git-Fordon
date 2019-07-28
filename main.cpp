@@ -8,14 +8,17 @@
 #include <ctime>
 
 class Paddle{
+
 protected:
  sf::RectangleShape rectangle_;
  public:
+
     Paddle (){
          rectangle_.setSize(sf::Vector2f(60.0, 60.0));
          rectangle_.setPosition(500.0, 400.0);
          rectangle_.setFillColor(sf::Color(255, 255, 10));
          rectangle_.getGlobalBounds();
+
 
       }
 
@@ -45,6 +48,10 @@ protected:
 
     }
 
+    sf::FloatRect doKolizji()
+    {
+        return rectangle_.getGlobalBounds();
+    }
 
 
     void step(float delta_x){
@@ -57,8 +64,75 @@ protected:
         {
             rectangle_.move(stepp*delta_x,0);
         }
+        else {
+           rectangle_.move(stepp*delta_x,0);
+        }
     }
 };
+
+class Shot{
+
+protected:
+ sf::RectangleShape shot_;
+ public:
+
+    Shot (){
+         shot_.setSize(sf::Vector2f(20.0, 20.0));
+         shot_.setPosition(500.0, 500.0);
+         shot_.setFillColor(sf::Color(155, 255, 10));
+         shot_.getGlobalBounds();
+
+
+      }
+
+    void bounds(float &x, float &y)
+    {
+        y=shot_.getGlobalBounds().top;
+        x=shot_.getGlobalBounds().left;
+    }
+    void draw(sf::RenderWindow &w)
+    {
+       w.draw(shot_);
+
+
+    }
+    void up(float delta_y){
+        shot_.move(0,2*delta_y);
+    }
+
+    void set_size(float x, float y)
+    {
+        shot_.setSize(sf::Vector2f(x,y));
+    }
+
+
+    void set_position(float x, float y){
+        shot_.setPosition(x,y-100);
+
+    }
+
+    sf::FloatRect doKolizji()
+    {
+        return shot_.getGlobalBounds();
+    }
+
+
+    void step(float delta_x){
+                double stepp=0.5;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        {
+            shot_.move(stepp*delta_x,0);
+        }
+        else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        {
+            shot_.move(stepp*delta_x,0);
+        }
+
+
+    }
+};
+
+
 using namespace std;
 
 Paddle ustawienia(Paddle &rectangle_2, Paddle &rectangle_3, Paddle &rectangle_4, Paddle &rectangle_5,Paddle &rectangle_6,Paddle &rectangle_7,Paddle &rectangle_8 )
@@ -123,15 +197,51 @@ bool collision_d(Paddle &rectangle_A, Paddle &rectangle_B)
         return false;
 }
 
+bool shotcollision(Shot &rectangle_A, Paddle &rectangle_B)
+{
+        float x1;
+        float y1;
+        float x2;
+        float y2;
+        rectangle_A.bounds(x1, y1);
+        rectangle_B.bounds(x2, y2);
+
+        //cout << x1 << " : " << y1 << endl;
+        //cout << x2 << " : " << y2 << endl;
+
+        if (x1 + 50 > x2 && x1 - 50 < x2 && y1 + 50 > y2 && y1 - 50 < y2)
+        {
+                cout << "+++++++" << endl;
+                return true;
+        }
+        return false;
+}
+
+
 
 
 int main()
 {
     srand( time( NULL ) );
+    bool b=false;
+    sf::Texture texture;
+    texture.loadFromFile("samolot.jpg");
+
+    sf::Sprite sprite;
+    sprite.setTexture(texture);
+
+
+
+
+   // rectangle_1.setTexture(gracz);
     std::vector<Paddle*> runda;
+    std::vector<Shot*> strzaly;
      sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
     Paddle rectangle_1;
     rectangle_1.set_position(400,600);
+
+    Shot pocisk_1;
+    pocisk_1.set_position(420,600);
 
     Paddle rectangle_2;
     Paddle rectangle_3;
@@ -157,10 +267,12 @@ int main()
     sf::Sprite obrazek;
     obrazek.setTexture( tekstura );
 
+
+
+
     sf::RectangleShape rectangle(sf::Vector2f(120.0, 60.0));
     rectangle.setPosition(500.0, 400.0);
     rectangle.setFillColor(sf::Color(100, 50, 250));
-
 
 
     sf::Clock clock;
@@ -175,27 +287,118 @@ int main()
              window.close();
      }
       window.clear(sf::Color::Black);
+      int a=0;
       if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
                       rectangle_1.step(-2.0);
+                    if(!b) pocisk_1.step(-2.0);
+
                   }
       if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
                       rectangle_1.step(2.0);
-                  }
+
+                    if(!b)  pocisk_1.step(2.0);
+
+                     }
+
+
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+      {
+         b=true;
+      }
+
+if(b==true)
+{
+    pocisk_1.up(-0.5);
+
+}
     rectangle_2.down(0.5);
-    rectangle_3.down(1);
+    rectangle_3.down(0.75);
     rectangle_4.down(0.75);
     rectangle_5.down(0.4);
     rectangle_6.down(( std::rand() % 1 ) + 0.1);
     rectangle_7.down(( std::rand() % 3 ) + 0.1);
     rectangle_8.down(( std::rand() % 2 ) + 0.1);
 
-        collision(rectangle_1, rectangle_2);
-        collision(rectangle_1, rectangle_3);
-        collision(rectangle_1, rectangle_4);
-        collision(rectangle_1, rectangle_5);
-        collision(rectangle_1, rectangle_6);
-        collision(rectangle_1, rectangle_7);
-        collision(rectangle_1, rectangle_8);
+    //sf::FloatRect boundy=rectangle_1.doKolizji();
+    //sf::FloatRect boundy2=rectangle_2.doKolizji();
+
+    if(rectangle_1.doKolizji().intersects(rectangle_2.doKolizji())==true )
+    {
+    cout<<"kolizja";
+    }
+
+
+    if(rectangle_1.doKolizji().intersects(rectangle_3.doKolizji())==true )
+    {
+    cout<<"kolizja";
+    }
+
+
+    if(rectangle_1.doKolizji().intersects(rectangle_4.doKolizji())==true )
+    {
+    cout<<"kolizja";
+    }
+    if(rectangle_1.doKolizji().intersects(rectangle_5.doKolizji())==true )
+    {
+    cout<<"kolizja";
+    }
+
+    if(rectangle_1.doKolizji().intersects(rectangle_6.doKolizji())==true )
+    {
+    cout<<"kolizja";
+    }
+
+
+
+
+
+
+       // collision(rectangle_1, rectangle_2);
+     //   collision(rectangle_1, rectangle_3);
+       // collision(rectangle_1, rectangle_4);
+       // collision(rectangle_1, rectangle_5);
+       // collision(rectangle_1, rectangle_6);
+      //  collision(rectangle_1, rectangle_7);
+       // collision(rectangle_1, rectangle_8);
+    if(pocisk_1.doKolizji().intersects(rectangle_2.doKolizji())==true )
+    {
+    cout<<"trafiony";
+    rectangle_2.step(3.0);
+    }
+
+    if(pocisk_1.doKolizji().intersects(rectangle_3.doKolizji())==true )
+    {
+    cout<<"trafiony";
+    rectangle_3.step(3.0);
+    }
+    if(pocisk_1.doKolizji().intersects(rectangle_4.doKolizji())==true )
+    {
+    cout<<"trafiony";
+    rectangle_4.step(3.0);
+    }
+    if(pocisk_1.doKolizji().intersects(rectangle_5.doKolizji())==true )
+    {
+    cout<<"trafiony";
+    rectangle_5.step(3.0);
+    }
+    if(pocisk_1.doKolizji().intersects(rectangle_6.doKolizji())==true )
+    {
+    cout<<"trafiony";
+    rectangle_6.step(3.0);
+    }
+    if(pocisk_1.doKolizji().intersects(rectangle_7.doKolizji())==true )
+    {
+    cout<<"trafiony";
+    rectangle_7.step(3.0);
+    }
+    if(pocisk_1.doKolizji().intersects(rectangle_8.doKolizji())==true )
+    {
+    cout<<"trafiony";
+    rectangle_8.step(3.0);
+    }
+
+
+
 
 
 
@@ -203,22 +406,32 @@ int main()
 
         //collision_d(rectangle_d, rectangle_5);
 
+        window.draw( obrazek );//tlo
 
+//      sf::Texture::bind(&gracz);
 
+      sf::Texture gracz;
+      gracz.loadFromFile("samolot.jpg");
 
-      window.draw( obrazek );
+      rectangle.setTexture(&gracz);
+      rectangle_1.draw(window);
 
-    rectangle_1.draw(window);
-    rectangle_d.draw(window);
+     // sf::Texture::bind(NULL);
 
+      rectangle_d.draw(window);
 
+       pocisk_1.draw(window);
        for(auto itr=runda.begin(); itr!=runda.end();itr++)
        {
         (*itr)->draw(window);
-
-
        }
-int i=0;
+
+       for(auto itr_2=strzaly.begin(); itr_2!=strzaly.end();itr_2++)
+       {
+        (*itr_2)->draw(window);
+       }
+
+       int i=0;
        if(collision_d(rectangle_d, rectangle_8)==true && i<1)
     {
            ustawienia(rectangle_2, rectangle_3,rectangle_4,rectangle_5,rectangle_6,rectangle_7,rectangle_8);
