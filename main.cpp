@@ -77,7 +77,7 @@ protected:
  public:
 
     Shot (){
-         shot_.setSize(sf::Vector2f(20.0, 20.0));
+         shot_.setSize(sf::Vector2f(10.0, 10.0));
          shot_.setPosition(500.0, 500.0);
          shot_.setFillColor(sf::Color(155, 255, 10));
          shot_.getGlobalBounds();
@@ -132,7 +132,6 @@ protected:
     }
 };
 
-
 using namespace std;
 
 Paddle ustawienia(Paddle &rectangle_2, Paddle &rectangle_3, Paddle &rectangle_4, Paddle &rectangle_5,Paddle &rectangle_6,Paddle &rectangle_7,Paddle &rectangle_8 )
@@ -176,7 +175,6 @@ bool collision(Paddle &rectangle_A, Paddle &rectangle_B)
         return false;
 }
 
-
 bool collision_d(Paddle &rectangle_A, Paddle &rectangle_B)
 {
         float x1;
@@ -195,6 +193,15 @@ bool collision_d(Paddle &rectangle_A, Paddle &rectangle_B)
                 return true;
         }
         return false;
+}
+
+float polozenie(Paddle &rectangle_A)
+{
+    float plane_x;
+    float plane_y;
+    rectangle_A.bounds(plane_x,plane_y);
+    //cout<<plane_x<<endl;
+    return plane_x;
 }
 
 bool shotcollision(Shot &rectangle_A, Paddle &rectangle_B)
@@ -217,15 +224,18 @@ bool shotcollision(Shot &rectangle_A, Paddle &rectangle_B)
         return false;
 }
 
-
-
-
 int main()
 {
+    float plane_x;
+    float plane_y;
+
     int zycie=3;
-    int pociski=1;
+    cout<<"LIFE: "<<zycie<<endl;
+    int pociski=0;
+    cout<<"SHOTS: "<<pociski<<endl;
     srand( time( NULL ) );
     bool b=false;
+    bool up=false;
     sf::Texture texture;
     texture.loadFromFile("samolot.jpg");
 
@@ -238,10 +248,10 @@ int main()
    // rectangle_1.setTexture(gracz);
     std::vector<Paddle*> runda;
     std::vector<Shot*> strzaly;
-     sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
     Paddle rectangle_1;
     rectangle_1.set_position(400,600);
-
+    rectangle_1.bounds(plane_x,plane_y);
     Shot pocisk_1;
     pocisk_1.set_position(420,630);
 
@@ -261,8 +271,12 @@ int main()
     runda.push_back(&rectangle_7);
     runda.push_back(&rectangle_8);
     Paddle rectangle_d;
-    rectangle_d.set_position(0,660);
+    rectangle_d.set_position(0,700);
     rectangle_d.set_size(8000,5);
+    Paddle rectangle_u;
+    rectangle_u.set_size(8000,5);
+    rectangle_u.set_position(0,10);
+
 
     sf::Texture tekstura;
     tekstura.loadFromFile( "niebo.jpg" );
@@ -290,29 +304,50 @@ int main()
      }
       window.clear(sf::Color::Black);
 
-      if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+      if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+      {
                       rectangle_1.step(-2.0);
-                    if(!b) pocisk_1.step(-2.0);
+                    if(!b)
+                    {
+                     pocisk_1.step(-2.0);
+                    }
 
-                  }
-      if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                      rectangle_1.step(2.0);
+      }
 
-                    if(!b)  pocisk_1.step(2.0);
+      if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+      {
+                    rectangle_1.step(2.0);
 
-                     }
+                    if(!b )
+                    {
+                     pocisk_1.step(2.0);
+                    }
+
+       }
 
 
       if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
       {
          b=true;
-      }
+         pociski=0;
+               }
 
 if(b==true)
 {
     pocisk_1.up(-0.5);
 
 }
+if(pocisk_1.doKolizji().intersects(rectangle_u.doKolizji())==true )
+{
+    up=true;
+    //b=false;
+}
+
+if(b==true && pociski>0 && up==true)
+{
+    pocisk_1.set_position(plane_x+25,630);
+}
+
     rectangle_2.down(0.5);
     rectangle_3.down(0.75);
     rectangle_4.down(0.75);
@@ -326,50 +361,46 @@ if(b==true)
 
     if(rectangle_1.doKolizji().intersects(rectangle_2.doKolizji())==true )
     {
-    cout<<"kolizja";
+    zycie--;
+    cout<<"LIFE: "<<zycie<<endl;
     rectangle_2.set_position(100,1000);
     }
-
-
     if(rectangle_1.doKolizji().intersects(rectangle_3.doKolizji())==true )
     {
-    cout<<"kolizja";
+    zycie--;
+    cout<<"LIFE: "<<zycie<<endl;
     rectangle_3.set_position(100,1000);
     }
-
-
     if(rectangle_1.doKolizji().intersects(rectangle_4.doKolizji())==true )
     {
-    cout<<"kolizja";
+    zycie--;
+    cout<<"LIFE: "<<zycie<<endl;
     rectangle_4.set_position(100,1000);
     }
     if(rectangle_1.doKolizji().intersects(rectangle_5.doKolizji())==true )
     {
-    cout<<"kolizja";
+    zycie--;
+    cout<<"LIFE: "<<zycie<<endl;
     rectangle_5.set_position(100,1000);
     }
-
     if(rectangle_1.doKolizji().intersects(rectangle_6.doKolizji())==true )
     {
-    cout<<"kolizja";
+    zycie--;
+    cout<<"LIFE: "<<zycie<<endl;
     rectangle_6.set_position(100,1000);
     }
     if(rectangle_1.doKolizji().intersects(rectangle_7.doKolizji())==true )
     {
-    cout<<"kolizja";
+    zycie--;
+    cout<<"LIFE: "<<zycie<<endl;
     rectangle_7.set_position(100,1000);
     }
     if(rectangle_1.doKolizji().intersects(rectangle_8.doKolizji())==true )
     {
-    cout<<"kolizja";
+    zycie--;
+    cout<<"LIFE: "<<zycie<<endl;
     rectangle_8.set_position(100,1000);
     }
-
-
-
-
-
-
        // collision(rectangle_1, rectangle_2);
      //   collision(rectangle_1, rectangle_3);
        // collision(rectangle_1, rectangle_4);
@@ -377,6 +408,8 @@ if(b==true)
        // collision(rectangle_1, rectangle_6);
       //  collision(rectangle_1, rectangle_7);
        // collision(rectangle_1, rectangle_8);
+
+    plane_x=polozenie(rectangle_1);
     if(pocisk_1.doKolizji().intersects(rectangle_2.doKolizji())==true )
     {
     cout<<"trafiony";
@@ -436,6 +469,7 @@ if(b==true)
      // sf::Texture::bind(NULL);
 
       rectangle_d.draw(window);
+      rectangle_u.draw(window);
 
        pocisk_1.draw(window);
        for(auto itr=runda.begin(); itr!=runda.end();itr++)
@@ -467,16 +501,24 @@ if(b==true)
 
        if(i==7)
     {
-           ustawienia(rectangle_2, rectangle_3,rectangle_4,rectangle_5,rectangle_6,rectangle_7,rectangle_8);
+           pociski=1;
+           cout<<"SHOTS: "<<pociski<<endl;
+           if(zycie>0)
+           {
+        ustawienia(rectangle_2, rectangle_3,rectangle_4,rectangle_5,rectangle_6,rectangle_7,rectangle_8);
 
 
         for(auto itr=runda.begin(); itr!=runda.end();itr++)
         {
          (*itr)->draw(window);
           i=2;
-        //  cout<<"xD";
         }
-
+            }
+           else
+           {
+            cout<<"PRZEGRALES !"<<endl;
+            window.close();
+           }
 
     }
 
