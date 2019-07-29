@@ -19,7 +19,6 @@ protected:
          rectangle_.setFillColor(sf::Color(255, 255, 10));
          rectangle_.getGlobalBounds();
 
-
       }
 
     void bounds(float &x, float &y)
@@ -30,7 +29,6 @@ protected:
     void draw(sf::RenderWindow &w)
     {
        w.draw(rectangle_);
-
 
     }
     void down(float delta_y){
@@ -51,6 +49,16 @@ protected:
     sf::FloatRect doKolizji()
     {
         return rectangle_.getGlobalBounds();
+    }
+    int get_x()
+    {
+        sf::Vector2f pos=rectangle_.getPosition();
+        return pos.x;
+    }
+    int get_y()
+    {
+        sf::Vector2f pos = rectangle_.getPosition();
+        return pos.y;
     }
 
 
@@ -94,7 +102,6 @@ protected:
     {
        w.draw(shot_);
 
-
     }
     void up(float delta_y){
         shot_.move(0,2*delta_y);
@@ -116,7 +123,6 @@ protected:
         return shot_.getGlobalBounds();
     }
 
-
     void step(float delta_x){
                 double stepp=0.5;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
@@ -127,8 +133,6 @@ protected:
         {
             shot_.move(stepp*delta_x,0);
         }
-
-
     }
 };
 
@@ -232,7 +236,7 @@ int main()
     int zycie=3;
     cout<<"LIFE: "<<zycie<<endl;
     int pociski=0;
-    cout<<"SHOTS: "<<pociski<<endl;
+    //cout<<"SHOTS: "<<pociski<<endl;
     srand( time( NULL ) );
     bool b=false;
     bool up=false;
@@ -242,10 +246,6 @@ int main()
     sf::Sprite sprite;
     sprite.setTexture(texture);
 
-
-
-
-   // rectangle_1.setTexture(gracz);
     std::vector<Paddle*> runda;
     std::vector<Shot*> strzaly;
     sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
@@ -283,13 +283,9 @@ int main()
     sf::Sprite obrazek;
     obrazek.setTexture( tekstura );
 
-
-
-
     sf::RectangleShape rectangle(sf::Vector2f(120.0, 60.0));
     rectangle.setPosition(500.0, 400.0);
     rectangle.setFillColor(sf::Color(100, 50, 250));
-
 
     sf::Clock clock;
  while (window.isOpen()) {
@@ -322,9 +318,7 @@ int main()
                     {
                      pocisk_1.step(2.0);
                     }
-
        }
-
 
       if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
       {
@@ -335,12 +329,10 @@ int main()
 if(b==true)
 {
     pocisk_1.up(-0.5);
-
 }
 if(pocisk_1.doKolizji().intersects(rectangle_u.doKolizji())==true )
 {
     up=true;
-    //b=false;
 }
 
 if(b==true && pociski>0 && up==true)
@@ -355,9 +347,6 @@ if(b==true && pociski>0 && up==true)
     rectangle_6.down(( std::rand() % 1 ) + 0.4);
     rectangle_7.down(( std::rand() % 3 ) + 0.4);
     rectangle_8.down(( std::rand() % 2 ) + 0.4);
-
-    //sf::FloatRect boundy=rectangle_1.doKolizji();
-    //sf::FloatRect boundy2=rectangle_2.doKolizji();
 
     if(rectangle_1.doKolizji().intersects(rectangle_2.doKolizji())==true )
     {
@@ -412,61 +401,56 @@ if(b==true && pociski>0 && up==true)
     plane_x=polozenie(rectangle_1);
     if(pocisk_1.doKolizji().intersects(rectangle_2.doKolizji())==true )
     {
-    cout<<"trafiony";
+    //cout<<"trafiony";
     rectangle_2.set_position(100,1000);
     }
 
     if(pocisk_1.doKolizji().intersects(rectangle_3.doKolizji())==true )
     {
-    cout<<"trafiony";
+   // cout<<"trafiony";
     rectangle_3.set_position(100,1000);
     }
     if(pocisk_1.doKolizji().intersects(rectangle_4.doKolizji())==true )
     {
-    cout<<"trafiony";
+   // cout<<"trafiony";
     rectangle_4.set_position(100,1000);
     }
     if(pocisk_1.doKolizji().intersects(rectangle_5.doKolizji())==true )
     {
-    cout<<"trafiony";
+    //cout<<"trafiony";
     rectangle_5.set_position(100,1000);
     }
     if(pocisk_1.doKolizji().intersects(rectangle_6.doKolizji())==true )
     {
-    cout<<"trafiony";
+    //cout<<"trafiony";
     rectangle_6.set_position(100,1000);
     }
     if(pocisk_1.doKolizji().intersects(rectangle_7.doKolizji())==true )
     {
-    cout<<"trafiony";
+    //cout<<"trafiony";
     rectangle_7.set_position(100,1000);
     }
     if(pocisk_1.doKolizji().intersects(rectangle_8.doKolizji())==true )
     {
-    cout<<"trafiony";
+    //cout<<"trafiony";
     rectangle_8.set_position(100,1000);
     }
 
-
-
-
-
-
-
-
-        //collision_d(rectangle_d, rectangle_5);
-
-        window.draw( obrazek );//tlo
-
-//      sf::Texture::bind(&gracz);
-
+      window.draw( obrazek );//tlo
+      rectangle_1.draw(window);
       sf::Texture gracz;
       gracz.loadFromFile("samolot.jpg");
+      sf::Sprite samolot;
+      samolot.setTexture(gracz);
+      int x, y;
+      x = rectangle_1.get_x();
+      y = rectangle_1.get_y();
+      samolot.setPosition(plane_x,plane_y);
+      samolot.setScale(1.0, 1.0);//
+      window.draw(samolot);
 
-      rectangle.setTexture(&gracz);
-      rectangle_1.draw(window);
 
-     // sf::Texture::bind(NULL);
+
 
       rectangle_d.draw(window);
       rectangle_u.draw(window);
