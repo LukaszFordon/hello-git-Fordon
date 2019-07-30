@@ -16,7 +16,7 @@ protected:
     Paddle (){
          rectangle_.setSize(sf::Vector2f(60.0, 60.0));
          rectangle_.setPosition(500.0, 400.0);
-         rectangle_.setFillColor(sf::Color(255, 255, 10));
+         rectangle_.setFillColor(sf::Color(255, 255, 255));
          rectangle_.getGlobalBounds();
 
       }
@@ -50,16 +50,6 @@ protected:
     {
         return rectangle_.getGlobalBounds();
     }
-    int get_x()
-    {
-        sf::Vector2f pos=rectangle_.getPosition();
-        return pos.x;
-    }
-    int get_y()
-    {
-        sf::Vector2f pos = rectangle_.getPosition();
-        return pos.y;
-    }
 
 
     void step(float delta_x){
@@ -87,7 +77,7 @@ protected:
     Shot (){
          shot_.setSize(sf::Vector2f(10.0, 10.0));
          shot_.setPosition(500.0, 500.0);
-         shot_.setFillColor(sf::Color(155, 255, 10));
+         shot_.setFillColor(sf::Color(100, 0, 0));
          shot_.getGlobalBounds();
 
 
@@ -230,11 +220,16 @@ bool shotcollision(Shot &rectangle_A, Paddle &rectangle_B)
 
 int main()
 {
+    int lap=1;
     float plane_x;
     float plane_y;
 
     int zycie=3;
+    if(zycie>=0)
+    {
     cout<<"LIFE: "<<zycie<<endl;
+    }
+
     int pociski=0;
     //cout<<"SHOTS: "<<pociski<<endl;
     srand( time( NULL ) );
@@ -253,7 +248,7 @@ int main()
     rectangle_1.set_position(400,600);
     rectangle_1.bounds(plane_x,plane_y);
     Shot pocisk_1;
-    pocisk_1.set_position(420,630);
+    pocisk_1.set_position(424,630);
 
     Paddle rectangle_2;
     Paddle rectangle_3;
@@ -276,7 +271,12 @@ int main()
     Paddle rectangle_u;
     rectangle_u.set_size(8000,5);
     rectangle_u.set_position(0,10);
-
+    Paddle rectangle_r;
+    rectangle_r.set_position(800,550);
+    rectangle_r.set_size(5,200);
+    Paddle rectangle_l;
+    rectangle_l.set_position(-5,550);
+    rectangle_l.set_size(5,200);
 
     sf::Texture tekstura;
     tekstura.loadFromFile( "niebo.jpg" );
@@ -337,7 +337,7 @@ if(pocisk_1.doKolizji().intersects(rectangle_u.doKolizji())==true )
 
 if(b==true && pociski>0 && up==true)
 {
-    pocisk_1.set_position(plane_x+25,630);
+    pocisk_1.set_position(plane_x+24,630);
 }
 
     rectangle_2.down(0.5);
@@ -351,43 +351,64 @@ if(b==true && pociski>0 && up==true)
     if(rectangle_1.doKolizji().intersects(rectangle_2.doKolizji())==true )
     {
     zycie--;
+    if(zycie>=0)
+    {
     cout<<"LIFE: "<<zycie<<endl;
+    }
     rectangle_2.set_position(100,1000);
     }
     if(rectangle_1.doKolizji().intersects(rectangle_3.doKolizji())==true )
     {
     zycie--;
+    if(zycie>=0)
+    {
     cout<<"LIFE: "<<zycie<<endl;
+    }
     rectangle_3.set_position(100,1000);
     }
     if(rectangle_1.doKolizji().intersects(rectangle_4.doKolizji())==true )
     {
     zycie--;
+    if(zycie>=0)
+    {
     cout<<"LIFE: "<<zycie<<endl;
+    }
     rectangle_4.set_position(100,1000);
     }
     if(rectangle_1.doKolizji().intersects(rectangle_5.doKolizji())==true )
     {
     zycie--;
+    if(zycie>=0)
+    {
     cout<<"LIFE: "<<zycie<<endl;
+    }
     rectangle_5.set_position(100,1000);
     }
     if(rectangle_1.doKolizji().intersects(rectangle_6.doKolizji())==true )
     {
     zycie--;
+    if(zycie>=0)
+    {
     cout<<"LIFE: "<<zycie<<endl;
+    }
     rectangle_6.set_position(100,1000);
     }
     if(rectangle_1.doKolizji().intersects(rectangle_7.doKolizji())==true )
     {
     zycie--;
+    if(zycie>=0)
+    {
     cout<<"LIFE: "<<zycie<<endl;
+    }
     rectangle_7.set_position(100,1000);
     }
     if(rectangle_1.doKolizji().intersects(rectangle_8.doKolizji())==true )
     {
     zycie--;
+    if(zycie>=0)
+    {
     cout<<"LIFE: "<<zycie<<endl;
+    }
     rectangle_8.set_position(100,1000);
     }
        // collision(rectangle_1, rectangle_2);
@@ -436,24 +457,35 @@ if(b==true && pociski>0 && up==true)
     rectangle_8.set_position(100,1000);
     }
 
+    if(rectangle_1.doKolizji().intersects(rectangle_r.doKolizji())==true )
+    {
+    //cout<<"trafiony";
+    rectangle_1.step(-2.0);
+    pocisk_1.step(-2.0);
+    }
+    if(rectangle_1.doKolizji().intersects(rectangle_l.doKolizji())==true )
+    {
+    //cout<<"trafiony";
+    rectangle_1.step(2.0);
+    pocisk_1.step(2.0);
+    }
+
+
+
       window.draw( obrazek );//tlo
       rectangle_1.draw(window);
       sf::Texture gracz;
       gracz.loadFromFile("samolot.jpg");
       sf::Sprite samolot;
       samolot.setTexture(gracz);
-      int x, y;
-      x = rectangle_1.get_x();
-      y = rectangle_1.get_y();
       samolot.setPosition(plane_x,plane_y);
       samolot.setScale(1.0, 1.0);//
       window.draw(samolot);
 
-
-
-
       rectangle_d.draw(window);
       rectangle_u.draw(window);
+      rectangle_r.draw(window);
+      rectangle_l.draw(window);
 
        pocisk_1.draw(window);
        for(auto itr=runda.begin(); itr!=runda.end();itr++)
@@ -468,45 +500,67 @@ if(b==true && pociski>0 && up==true)
 
        int i=0;
        if(collision_d(rectangle_d, rectangle_8)==true)
-        i++;
+       {
+           i++;
+       }
        if(collision_d(rectangle_d, rectangle_7)==true)
-        i++;
-       if(collision_d(rectangle_d, rectangle_6)==true)
-        i++;
-       if(collision_d(rectangle_d, rectangle_5)==true)
-        i++;
-       if(collision_d(rectangle_d, rectangle_4)==true)
+       {
+           i++;
 
-        i++;
+       }
+       if(collision_d(rectangle_d, rectangle_6)==true)
+       {
+           i++;
+       }
+       if(collision_d(rectangle_d, rectangle_5)==true)
+       {
+           i++;
+       }
+       if(collision_d(rectangle_d, rectangle_4)==true)
+       {
+           i++;
+       }
        if(collision_d(rectangle_d, rectangle_3)==true)
-        i++;
+       {
+           i++;
+       }
        if(collision_d(rectangle_d, rectangle_2)==true)
-        i++;
+       {
+           i++;
+       }
 
        if(i==7)
     {
+           lap++;
            pociski=1;
-           cout<<"SHOTS: "<<pociski<<endl;
+           //cout<<"SHOTS: "<<pociski<<endl;
            if(zycie>0)
            {
+
         ustawienia(rectangle_2, rectangle_3,rectangle_4,rectangle_5,rectangle_6,rectangle_7,rectangle_8);
 
 
         for(auto itr=runda.begin(); itr!=runda.end();itr++)
         {
          (*itr)->draw(window);
-          i=2;
+         // i=2;
         }
+              //  cout<<lap<<endl;
             }
+
            else
            {
-            cout<<"PRZEGRALES !"<<endl;
+            cout<<"YOU LOST !"<<endl;
             window.close();
            }
 
     }
 
-
+if(lap==15 && i==7)
+{
+    window.close();
+cout<<"YOU WIN !!!"<<endl;
+}
 
 
 
