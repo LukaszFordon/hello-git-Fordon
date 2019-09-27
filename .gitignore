@@ -14,7 +14,6 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
 
 # Fortran module files
 *.mod
@@ -30,3 +29,15 @@
 *.exe
 *.out
 *.app
+*.Makefile
+build-Novel_the_game-Desktop_Qt_5_12_1_MSVC2017_64bit-Debug/.qmake.stash
+*.ttf
+*.ilk
+*.pdb
+build-Novel_the_game-Desktop_Qt_5_12_1_MSVC2017_64bit-Debug/Makefile
+*.Debug
+*.Release
+*.db
+*.user
+*.pro
+*.user
