@@ -11,6 +11,7 @@ class Paddle{
 
 protected:
  sf::RectangleShape rectangle_;
+ float speed;
  public:
 
     Paddle (){
@@ -52,19 +53,19 @@ protected:
     }
 
 
-    void step(float delta_x){
-                double stepp=0.5;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-        {
-            rectangle_.move(stepp*delta_x,0);
-        }
-        else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-        {
-            rectangle_.move(stepp*delta_x,0);
-        }
-        else {
-           rectangle_.move(stepp*delta_x,0);
-        }
+    void step(float delta_x)
+    {
+        float stepp=0.5;
+        rectangle_.move(stepp*delta_x,0);
+        //usunięcie nadmiarowych if
+    }
+    void set_speed(float v)
+    {
+        speed=v;
+    }
+    float get_speed()
+    {
+        return speed;
     }
 };
 
@@ -79,8 +80,6 @@ protected:
          shot_.setPosition(500.0, 500.0);
          shot_.setFillColor(sf::Color(100, 0, 0));
          shot_.getGlobalBounds();
-
-
       }
 
     void bounds(float &x, float &y)
@@ -93,7 +92,8 @@ protected:
        w.draw(shot_);
 
     }
-    void up(float delta_y){
+    void up(float delta_y)
+    {
         shot_.move(0,2*delta_y);
     }
 
@@ -113,40 +113,24 @@ protected:
         return shot_.getGlobalBounds();
     }
 
-    void step(float delta_x){
-                double stepp=0.5;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-        {
-            shot_.move(stepp*delta_x,0);
-        }
-        else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-        {
-            shot_.move(stepp*delta_x,0);
-        }
+    void step(float delta_x)
+    {
+        float stepp=0.5;
+        shot_.move(stepp*delta_x,0);
     }
 };
 
 using namespace std;
 
-Paddle ustawienia(Paddle &rectangle_2, Paddle &rectangle_3, Paddle &rectangle_4, Paddle &rectangle_5,Paddle &rectangle_6,Paddle &rectangle_7,Paddle &rectangle_8 )
+Paddle ustawienia(vector<Paddle> &rectangles )
 {
-    int x2=( std::rand() % 750 ) + 0;
-    int x3 =( std::rand() % 750 ) + 0;
-    int x4=( std::rand() % 750 ) + 0;
-    int x5 =( std::rand() % 750 ) + 0;
-    int x6=( std::rand() % 650 ) + 200;
-    int x7=( std::rand() % 750 ) + 0;
-    int x8=( std::rand() % 450 ) + 200;
 
-    rectangle_2.set_position(x2,30);
-    rectangle_3.set_position(x3,30);
-    rectangle_4.set_position(x4,30);
-    rectangle_5.set_position(x5,30);
-    rectangle_6.set_position(x6,30);
-    rectangle_7.set_position(x7,30);
-    rectangle_8.set_position(x8,30);
-    return rectangle_2;
-
+    for(auto it=rectangles.begin();it!=rectangles.end();it++)
+    {
+        it->set_position(((std::rand() % 750 ) + 0.0f),30.0f);
+        it->set_speed(((std::rand() % 10 )/20.0f) + 0.4f);
+    }
+    return rectangles[0];
 }
 
 bool collision(Paddle &rectangle_A, Paddle &rectangle_B)
@@ -220,11 +204,39 @@ bool shotcollision(Shot &rectangle_A, Paddle &rectangle_B)
 
 int main()
 {
-    int lap=1;
+    int lap=0;
     float plane_x;
     float plane_y;
 
+    sf::Texture meteor;
+    meteor.loadFromFile("bomba.png");
+    sf::Sprite kometa;
+    kometa.setTexture(meteor);
+
+    sf::Texture serce;
+    serce.loadFromFile("serce.png");
+    sf::Sprite hp;
+    hp.setTexture(serce);
+
+    sf::Texture gracz;
+    gracz.loadFromFile("samolot.png");
+    sf::Sprite samolot;
+    samolot.setTexture(gracz);
+
+    sf::Texture tekstura;
+    tekstura.loadFromFile( "niebo.jpg" );
+    sf::Sprite obrazek;
+    obrazek.setTexture( tekstura );
+
     int zycie=3;
+    vector<Paddle> life;
+    for (int i=0;i<zycie;i++) {
+        Paddle tmp;
+        tmp.set_size(50,50);
+        tmp.set_position(i*60,100);
+
+        life.push_back(tmp);
+    }
     if(zycie>=0)
     {
     cout<<"LIFE: "<<zycie<<endl;
@@ -235,13 +247,8 @@ int main()
     srand( time( NULL ) );
     bool b=false;
     bool up=false;
-    sf::Texture texture;
-    texture.loadFromFile("samolot.jpg");
 
-    sf::Sprite sprite;
-    sprite.setTexture(texture);
-
-    std::vector<Paddle*> runda;
+    std::vector<Paddle> rectangles;
     std::vector<Shot*> strzaly;
     sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
     Paddle rectangle_1;
@@ -250,21 +257,14 @@ int main()
     Shot pocisk_1;
     pocisk_1.set_position(424,630);
 
-    Paddle rectangle_2;
-    Paddle rectangle_3;
-    Paddle rectangle_4;
-    Paddle rectangle_5;
-    Paddle rectangle_6;
-    Paddle rectangle_7;
-    Paddle rectangle_8;
-    ustawienia(rectangle_2, rectangle_3,rectangle_4,rectangle_5,rectangle_6,rectangle_7,rectangle_8);
-    runda.push_back(&rectangle_2);
-    runda.push_back(&rectangle_3);
-    runda.push_back(&rectangle_4);
-    runda.push_back(&rectangle_5);
-    runda.push_back(&rectangle_6);
-    runda.push_back(&rectangle_7);
-    runda.push_back(&rectangle_8);
+    for(int i=0;i<=40;i++)
+    {
+        Paddle rec;
+        rectangles.push_back(rec);
+    }
+    ustawienia(rectangles);
+
+
     Paddle rectangle_d;
     rectangle_d.set_position(0,700);
     rectangle_d.set_size(8000,5);
@@ -278,10 +278,6 @@ int main()
     rectangle_l.set_position(-5,550);
     rectangle_l.set_size(5,200);
 
-    sf::Texture tekstura;
-    tekstura.loadFromFile( "niebo.jpg" );
-    sf::Sprite obrazek;
-    obrazek.setTexture( tekstura );
 
     sf::RectangleShape rectangle(sf::Vector2f(120.0, 60.0));
     rectangle.setPosition(500.0, 400.0);
@@ -289,7 +285,12 @@ int main()
 
     sf::Clock clock;
  while (window.isOpen()) {
-     float delta= float(clock.getElapsedTime().asSeconds());
+     float delta;
+     do{
+     delta= float(clock.getElapsedTime().asSeconds());
+     //cout<<delta<<endl;
+     }while(delta<0.007f);
+
      clock.restart();
 
      sf::Event event;
@@ -324,7 +325,7 @@ int main()
       {
          b=true;
          pociski=0;
-               }
+      }
 
 if(b==true)
 {
@@ -340,122 +341,31 @@ if(b==true && pociski>0 && up==true)
     pocisk_1.set_position(plane_x+24,630);
 }
 
-    rectangle_2.down(0.5);
-    rectangle_3.down(0.75);
-    rectangle_4.down(0.75);
-    rectangle_5.down(0.4);
-    rectangle_6.down(( std::rand() % 1 ) + 0.4);
-    rectangle_7.down(( std::rand() % 3 ) + 0.4);
-    rectangle_8.down(( std::rand() % 2 ) + 0.4);
+    for(auto it=rectangles.begin();it!=rectangles.begin()+10+2*lap;it++)
+    {
+    // cout<<speed<<endl;
+     it->down(it->get_speed());
+    }
 
-    if(rectangle_1.doKolizji().intersects(rectangle_2.doKolizji())==true )
+    for(auto it=rectangles.begin();it!=rectangles.begin()+10+2*lap;it++)
     {
-    zycie--;
-    if(zycie>=0)
-    {
-    cout<<"LIFE: "<<zycie<<endl;
+        if(rectangle_1.doKolizji().intersects(it->doKolizji()))
+        {
+            it->set_position(100,1000);
+            if(zycie>0)
+            {
+            zycie--;
+            }
+            cout<<"LIFE:"<<zycie<<endl;
+         }
+        if(pocisk_1.doKolizji().intersects(it->doKolizji()))
+        {
+            it->set_position(100,1000);
+        }
     }
-    rectangle_2.set_position(100,1000);
-    }
-    if(rectangle_1.doKolizji().intersects(rectangle_3.doKolizji())==true )
-    {
-    zycie--;
-    if(zycie>=0)
-    {
-    cout<<"LIFE: "<<zycie<<endl;
-    }
-    rectangle_3.set_position(100,1000);
-    }
-    if(rectangle_1.doKolizji().intersects(rectangle_4.doKolizji())==true )
-    {
-    zycie--;
-    if(zycie>=0)
-    {
-    cout<<"LIFE: "<<zycie<<endl;
-    }
-    rectangle_4.set_position(100,1000);
-    }
-    if(rectangle_1.doKolizji().intersects(rectangle_5.doKolizji())==true )
-    {
-    zycie--;
-    if(zycie>=0)
-    {
-    cout<<"LIFE: "<<zycie<<endl;
-    }
-    rectangle_5.set_position(100,1000);
-    }
-    if(rectangle_1.doKolizji().intersects(rectangle_6.doKolizji())==true )
-    {
-    zycie--;
-    if(zycie>=0)
-    {
-    cout<<"LIFE: "<<zycie<<endl;
-    }
-    rectangle_6.set_position(100,1000);
-    }
-    if(rectangle_1.doKolizji().intersects(rectangle_7.doKolizji())==true )
-    {
-    zycie--;
-    if(zycie>=0)
-    {
-    cout<<"LIFE: "<<zycie<<endl;
-    }
-    rectangle_7.set_position(100,1000);
-    }
-    if(rectangle_1.doKolizji().intersects(rectangle_8.doKolizji())==true )
-    {
-    zycie--;
-    if(zycie>=0)
-    {
-    cout<<"LIFE: "<<zycie<<endl;
-    }
-    rectangle_8.set_position(100,1000);
-    }
-       // collision(rectangle_1, rectangle_2);
-     //   collision(rectangle_1, rectangle_3);
-       // collision(rectangle_1, rectangle_4);
-       // collision(rectangle_1, rectangle_5);
-       // collision(rectangle_1, rectangle_6);
-      //  collision(rectangle_1, rectangle_7);
-       // collision(rectangle_1, rectangle_8);
 
     plane_x=polozenie(rectangle_1);
-    if(pocisk_1.doKolizji().intersects(rectangle_2.doKolizji())==true )
-    {
-    //cout<<"trafiony";
-    rectangle_2.set_position(100,1000);
-    }
 
-    if(pocisk_1.doKolizji().intersects(rectangle_3.doKolizji())==true )
-    {
-   // cout<<"trafiony";
-    rectangle_3.set_position(100,1000);
-    }
-    if(pocisk_1.doKolizji().intersects(rectangle_4.doKolizji())==true )
-    {
-   // cout<<"trafiony";
-    rectangle_4.set_position(100,1000);
-    }
-    if(pocisk_1.doKolizji().intersects(rectangle_5.doKolizji())==true )
-    {
-    //cout<<"trafiony";
-    rectangle_5.set_position(100,1000);
-    }
-    if(pocisk_1.doKolizji().intersects(rectangle_6.doKolizji())==true )
-    {
-    //cout<<"trafiony";
-    rectangle_6.set_position(100,1000);
-    }
-    if(pocisk_1.doKolizji().intersects(rectangle_7.doKolizji())==true )
-    {
-    //cout<<"trafiony";
-    rectangle_7.set_position(100,1000);
-    }
-    if(pocisk_1.doKolizji().intersects(rectangle_8.doKolizji())==true )
-    {
-    //cout<<"trafiony";
-    rectangle_8.set_position(100,1000);
-    }
 
     if(rectangle_1.doKolizji().intersects(rectangle_r.doKolizji())==true )
     {
@@ -469,18 +379,23 @@ if(b==true && pociski>0 && up==true)
     rectangle_1.step(2.0);
     pocisk_1.step(2.0);
     }
-
-
-
+      obrazek.setScale(0.44f,0.46f);
       window.draw( obrazek );//tlo
-      rectangle_1.draw(window);
-      sf::Texture gracz;
-      gracz.loadFromFile("samolot.jpg");
-      sf::Sprite samolot;
-      samolot.setTexture(gracz);
+
+      //rectangle_1.draw(window);
       samolot.setPosition(plane_x,plane_y);
-      samolot.setScale(1.0, 1.0);//
+      samolot.setScale(0.085f, 0.085f);//
       window.draw(samolot);
+
+      for(auto it=life.begin();it!=life.begin()+zycie;it++)
+      {
+          float xs,ys;
+          it->bounds(xs,ys);
+          //it->draw(window);
+          hp.setPosition(xs,ys);
+          hp.setScale(0.03f, 0.03f);//
+          window.draw(hp);
+      }
 
       rectangle_d.draw(window);
       rectangle_u.draw(window);
@@ -488,9 +403,16 @@ if(b==true && pociski>0 && up==true)
       rectangle_l.draw(window);
 
        pocisk_1.draw(window);
-       for(auto itr=runda.begin(); itr!=runda.end();itr++)
+
+       for(auto itr=rectangles.begin(); itr!=rectangles.begin()+10+2*lap;itr++)
        {
-        (*itr)->draw(window);
+        //itr->draw(window);
+        float xs,ys;
+        itr->bounds(xs,ys);
+        kometa.setPosition(xs-20,ys-20);
+        kometa.setScale(0.059f, 0.06f);
+        window.draw(kometa);
+
        }
 
        for(auto itr_2=strzaly.begin(); itr_2!=strzaly.end();itr_2++)
@@ -498,71 +420,35 @@ if(b==true && pociski>0 && up==true)
         (*itr_2)->draw(window);
        }
 
+       if(zycie<=0)
+       {
+        cout<<"YOU LOST !"<<endl;
+        window.close();
+       }
        int i=0;
-       if(collision_d(rectangle_d, rectangle_8)==true)
+       for(auto it=rectangles.begin();it!=rectangles.end();it++)
        {
-           i++;
-       }
-       if(collision_d(rectangle_d, rectangle_7)==true)
-       {
-           i++;
-
-       }
-       if(collision_d(rectangle_d, rectangle_6)==true)
-       {
-           i++;
-       }
-       if(collision_d(rectangle_d, rectangle_5)==true)
-       {
-           i++;
-       }
-       if(collision_d(rectangle_d, rectangle_4)==true)
-       {
-           i++;
-       }
-       if(collision_d(rectangle_d, rectangle_3)==true)
-       {
-           i++;
-       }
-       if(collision_d(rectangle_d, rectangle_2)==true)
-       {
-           i++;
+           if(collision_d(rectangle_d,(*it))==true)
+               i++;
        }
 
-       if(i==7)
+       if(i>=10+2*lap)
     {
-           lap++;
-           pociski=1;
-           //cout<<"SHOTS: "<<pociski<<endl;
-           if(zycie>0)
-           {
-
-        ustawienia(rectangle_2, rectangle_3,rectangle_4,rectangle_5,rectangle_6,rectangle_7,rectangle_8);
-
-
-        for(auto itr=runda.begin(); itr!=runda.end();itr++)
+        lap++;
+        pociski=1;
+        //cout<<"SHOTS: "<<pociski<<endl;
+        if(zycie>0)
         {
-         (*itr)->draw(window);
-         // i=2;
+            ustawienia(rectangles);
+
         }
-              //  cout<<lap<<endl;
-            }
-
-           else
-           {
-            cout<<"YOU LOST !"<<endl;
-            window.close();
-           }
-
     }
 
-if(lap==15 && i==7)
-{
+    if(lap==15)
+    {
     window.close();
-cout<<"YOU WIN !!!"<<endl;
-}
-
-
+    cout<<"YOU WIN !!!"<<endl;
+    }
 
    window.display();
 }
