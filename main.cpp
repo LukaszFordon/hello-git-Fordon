@@ -207,6 +207,7 @@ int main()
     int lap=0;
     float plane_x;
     float plane_y;
+    float gamespeed=150.0f;
 
     sf::Texture meteor;
     meteor.loadFromFile("bomba.png");
@@ -284,12 +285,11 @@ int main()
     rectangle.setFillColor(sf::Color(100, 50, 250));
 
     sf::Clock clock;
+    float delta=0;
  while (window.isOpen()) {
-     float delta;
-     do{
-     delta= float(clock.getElapsedTime().asSeconds());
-     //cout<<delta<<endl;
-     }while(delta<0.007f);
+	 
+     sf::sleep(sf::milliseconds(33)-sf::seconds(delta));
+     delta = float(clock.getElapsedTime().asSeconds());
 
      clock.restart();
 
@@ -303,21 +303,21 @@ int main()
 
       if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
       {
-                      rectangle_1.step(-2.0);
+                      rectangle_1.step(-2.0f*delta*gamespeed);
                     if(!b)
                     {
-                     pocisk_1.step(-2.0);
+                     pocisk_1.step(-2.0f*delta*gamespeed);
                     }
 
       }
 
       if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
       {
-                    rectangle_1.step(2.0);
+                    rectangle_1.step(2.0f*delta*gamespeed);
 
                     if(!b )
                     {
-                     pocisk_1.step(2.0);
+                     pocisk_1.step(2.0f*delta*gamespeed);
                     }
        }
 
@@ -329,7 +329,7 @@ int main()
 
 if(b==true)
 {
-    pocisk_1.up(-0.5);
+    pocisk_1.up(-0.5f*delta*gamespeed);
 }
 if(pocisk_1.doKolizji().intersects(rectangle_u.doKolizji())==true )
 {
@@ -344,7 +344,7 @@ if(b==true && pociski>0 && up==true)
     for(auto it=rectangles.begin();it!=rectangles.begin()+10+2*lap;it++)
     {
     // cout<<speed<<endl;
-     it->down(it->get_speed());
+     it->down(it->get_speed()*delta*gamespeed);
     }
 
     for(auto it=rectangles.begin();it!=rectangles.begin()+10+2*lap;it++)
